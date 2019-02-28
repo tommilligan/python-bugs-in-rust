@@ -13,12 +13,10 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - book
-            - dev
+            - .
       - save_cache:
           paths:
             - /usr/local/cargo/registry
-            - target
             - ~/.cargo
           key: cargo-cache-{{ arch }}-{{ checksum "dev/install" }}
   deploy:
