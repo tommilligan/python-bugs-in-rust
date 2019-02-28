@@ -7,4 +7,4 @@ git config user.name "circleci"
 git add .
 git commit -m "book build at $(date -Iseconds)"
 git remote add origin git@github.com:tommilligan/python-bugs-in-rust
-git push -f origin master:gh-pages
+yes | git push -f origin master:gh-pages

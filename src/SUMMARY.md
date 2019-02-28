@@ -1,3 +1,5 @@
 # Summary
 
-- [Chapter 1](./chapter_1.md)
+[Introduction](./intro.md)
+
+- [Mutation by Reference](./mutation_by_reference.md)
