@@ -11,7 +11,7 @@ def main():
     print(numbers)
 ```
 
-We assign two pieces of data in an array, an modify one of them.
+We assign two pieces of data in an array, and modify one of them.
 As expected, we get:
 
 ```python
@@ -49,7 +49,7 @@ So when we update the underlying data, all references are updated.
 ## References are pointers to data
 
 In rust:
-- references are noted explicitly using the `ref` keyword.
+- references are noted explicitly using the `&` operator.
 - mutable data structures are noted explicitly using the `mut` keyword.
 
 Here we can see that the `Vec` is mutable, so we should expect the values to change.
@@ -58,7 +58,7 @@ Here we can see that the `Vec` is mutable, so we should expect the values to cha
 fn main() {
     let mut numbers = vec![0, 1];
     numbers[0] += 100;
-    println!("{:?}", numbers);
+    println!("{:?}", numbers); // [100, 1]
 }
 ```
 
@@ -69,24 +69,37 @@ fn main() {
     let numbers = vec![0, 1];
 
     // error[E0382]: use of moved value: `numbers`
-    let mut matrix = [numbers, numbers];
+    let mut matrix = vec![numbers, numbers];
 
     matrix[0].push(2);
     println!("{:?}", matrix);
 }
 ```
 
-/ Explanation here
+Rust is telling us that we are being ambiguous about how we want to duplicate data here. We can either explicitly use the same `Vec` twice, and store two references to it:
+
+```rust
+fn main() {
+    let mut numbers = vec![0, 1];
+
+    let mut matrix = [&numbers, &numbers];
+    println!("{:?}", matrix); // [[0, 1], [0, 1]]
+}
+```
+
+Or, we can clone `numbers` to form a second vector, which will allow us to mutate one at a time:
 
 ```rust
 fn main() {
     let numbers_0 = vec![0, 1];
     let numbers_1 = numbers_0.clone();
-    let mut matrix = [numbers_0, numbers_1];
+    let mut matrix = vec![numbers_0, numbers_1];
     matrix[0].push(2);
-    println!("{:?}", matrix);
+    println!("{:?}", matrix); // [[0, 1, 2], [0, 1]]
 }
 ```
+
+Rust makes this difficult as copying a vector is an expensive operation - `Vec` is `Clone`, and not `Copy`.
 
 ## Summary
 
