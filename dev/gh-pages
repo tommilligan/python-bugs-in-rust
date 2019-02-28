@@ -1,8 +1,7 @@
 #!/bin/bash
 
-cd book
-touch .nojekyll
-npm install -g --silent gh-pages@2.0.1
 git config user.email "circleci@pbir"
 git config user.name "circleci"
-gh-pages --dotfiles --message "[skip ci] Updates" --di
+git worktree add book gh-pages
+git commit -m "book build at $(git log '--format=format:%H' master -1)"
+git push origin gh-pages
