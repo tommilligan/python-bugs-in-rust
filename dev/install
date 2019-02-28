@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 # (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
 (test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.2.3" mdbook)
 # cargo install-update -a
