@@ -17,6 +17,7 @@ jobs:
       - save_cache:
           paths:
             - /usr/local/cargo/registry
+            - target
             - ~/.cargo
           key: cargo-cache-{{ arch }}-{{ checksum "dev/install" }}
   deploy:
