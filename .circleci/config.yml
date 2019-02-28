@@ -7,7 +7,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - cargo-cache-{{ arch }}-{{ checksum "bin/install" }}
+            - cargo-cache-{{ arch }}-{{ checksum "dev/install" }}
       - run: ./dev/install
       - run: ./dev/ci
       - persist_to_workspace:
@@ -20,7 +20,7 @@ jobs:
             - /usr/local/cargo/registry
             - target
             - ~/.cargo
-          key: cargo-cache-{{ arch }}-{{ checksum "bin/install" }}
+          key: cargo-cache-{{ arch }}-{{ checksum "dev/install" }}
   deploy:
     docker:
       - image: circleci/rust:latest
