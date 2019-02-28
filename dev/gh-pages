@@ -1,7 +1,10 @@
 #!/bin/bash
 
+cd book
+git init
 git config user.email "circleci@pbir"
 git config user.name "circleci"
-git worktree add book gh-pages
+git add .
 git commit -m "book build at $(git log '--format=format:%H' master -1)"
-git push origin gh-pages
+git remote add origin git@github.com:tommilligan/python-bugs-in-rust
+git push -u origin gh-pages

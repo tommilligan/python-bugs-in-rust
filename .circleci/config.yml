@@ -13,7 +13,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - .
+            - book
       - save_cache:
           paths:
             - /usr/local/cargo/registry
