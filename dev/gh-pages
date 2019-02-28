@@ -5,6 +5,6 @@ git init
 git config user.email "circleci@pbir"
 git config user.name "circleci"
 git add .
-git commit -m "book build at $(git log '--format=format:%H' master -1)"
+git commit -m "book build at $(date -Iseconds)"
 git remote add origin git@github.com:tommilligan/python-bugs-in-rust
-git push -u origin gh-pages
+git push origin gh-pages
