@@ -7,19 +7,20 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - cargo-cache-{{ arch }}-{{ checksum "Cargo.lock" }}
+            - cargo-cache-{{ arch }}-{{ checksum "bin/install" }}
       - run: ./dev/install
       - run: ./dev/ci
       - persist_to_workspace:
           root: .
           paths:
-            - build
+            - book
+            - dev
       - save_cache:
           paths:
             - /usr/local/cargo/registry
             - target
             - ~/.cargo
-          key: cargo-cache-{{ arch }}-{{ checksum "Cargo.lock" }}
+          key: cargo-cache-{{ arch }}-{{ checksum "bin/install" }}
   deploy:
     docker:
       - image: circleci/rust:latest
@@ -28,7 +29,7 @@ jobs:
           at: .
       - add_ssh_keys:
           fingerprints:
-            - "ee:fb:b6:41:8a:df:e8:ad:24:30:a0:ff:42:7f:71:6e"
+            - "27:02:81:b0:7a:82:e9:39:32:e5:39:65:e5:d8:a5:70"
       - run: ./dev/gh-pages
 workflows:
   version: 2
