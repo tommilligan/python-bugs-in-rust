@@ -1,0 +1,5 @@
+[book]
+authors = ["Tom Milligan"]
+multilingual = false
+src = "src"
+title = "Python bugs (explained) in Rust"

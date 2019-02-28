@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd book
+touch .nojekyll
+npm install -g --silent gh-pages@2.0.1
+git config user.email "circleci@pbir"
+git config user.name "circleci"
+gh-pages --dotfiles --message "[skip ci] Updates" --di
