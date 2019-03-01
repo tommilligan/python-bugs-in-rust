@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -ex
+
+WATCH_DIRECTORY=src
+
+(command -v inotifywait || sudo apt-get install inotify-tools)
+
+inotifywait -e close_write,moved_to,create -m "$WATCH_DIRECTORY" |
+while read -r directory events filename; do
+  ./dev/ci || true
+done
