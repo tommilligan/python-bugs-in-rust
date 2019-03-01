@@ -3,9 +3,8 @@
 set -ex
 
 # install mdbook binary here, as we cannot in Cargo.lock
-(test -x $HOME/.cargo/bin/mdbook || cargo install --vers "^0.2.3" mdbook)
+(command -v mdbook || cargo install --vers "^0.2.3" mdbook)
 
 # optionally update all dependencies within the bin
 # (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
 # cargo install-update -a
-
