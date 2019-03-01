@@ -8,3 +8,4 @@ set -ex
 # optionally update all dependencies within the bin
 # (test -x $HOME/.cargo/bin/cargo-install-update || cargo install cargo-update)
 # cargo install-update -a
+
