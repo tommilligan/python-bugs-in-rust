@@ -17,7 +17,7 @@ jobs:
             - dev
       - save_cache:
           paths:
-            - /usr/local/cargo
+            - /usr/local/cargo/bin/mdbook
           key: cargo-cache-{{ arch }}-{{ checksum "dev/install" }}
   deploy:
     docker:
