@@ -8,16 +8,10 @@ Consider this python function:
 def main():
     numbers = [0, 1]
     numbers[0] += 100
-    print(numbers)
+    print(numbers) # [100, 1]
 ```
 
 We assign two pieces of data in an array, and modify one of them.
-As expected, we get:
-
-```python
-[100, 1]
-```
-
 How about this slightly more complex example?
 
 ```python
@@ -30,13 +24,13 @@ def main():
 
 You might expect the output to be:
 
-```python
+```log
 ([0, 1, 2], [0, 1])
 ```
 
 But what we actually get is:
 
-```python
+```log
 ([0, 1, 2], [0, 1, 2])
 ```
 
@@ -49,6 +43,7 @@ So when we update the underlying data, all references are updated.
 ## References are pointers to data
 
 In rust:
+
 - references are noted explicitly using the `&` operator.
 - mutable data structures are noted explicitly using the `mut` keyword.
 
@@ -103,6 +98,4 @@ Rust makes this difficult as copying a vector is an expensive operation - `Vec` 
 
 ## Summary
 
-One of rust's core features is _ownership_. This helps avoid
-accidental mutation of data, by enforcing who can use and update
-data at compile time.
+One of rust's core features is _ownership_. This helps avoid accidental mutation of data, by enforcing who can use and update data at compile time.
