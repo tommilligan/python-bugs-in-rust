@@ -57,7 +57,7 @@ fn main() {
     let gaspode = Dog {
         age: 9,
     };
-    println!("{}", gaspode.relative_age());
+    println!("{}", gaspode.relative_age()); // 63
 }
 ```
 
@@ -69,6 +69,23 @@ The above example explains that:
 - therefore, we can call `gaspode.relative_age()` and know the method exists
 
 If we forgot to add our implementation using `impl AnimalAge for Dog`, we would see
+
+```rust,compile_fail
+struct Dog {
+    age: i64,
+}
+
+trait AnimalAge {
+    fn relative_age(&self) -> i64;
+}
+
+fn main() {
+    let gaspode = Dog {
+        age: 9,
+    };
+    println!("{}", gaspode.relative_age());
+}
+```
 
 ```log
 error[E0599]: no method named `relative_age` found for type `Dog` in the current scope
@@ -88,4 +105,29 @@ error[E0599]: no method named `relative_age` found for type `Dog` in the current
 rustc has helpfully worked out:
 
 - `Dog` does not have a method called `relative_age` directly on it
-- there is a trait in scope called `AnimalAge` that we could implement to solve this
+- there is a trait in scope called `AnimalAge` that we could implement to solve this error
+
+Traits also help encapsulate features that can be shared between unrelated structs. Below we see an implementation of the same `AnimalAge` trait for a struct with different data type. Note how traits only define an interface, not the underlying details.
+
+```rust
+struct Butterfly {
+    age: f64,
+}
+
+trait AnimalAge {
+    fn relative_age(&self) -> i64;
+}
+
+impl AnimalAge for Butterfly {
+    fn relative_age(&self) -> i64 {
+        (self.age * 79.0).floor() as i64
+    }
+}
+
+fn main() {
+    let monarch = Butterfly {
+        age: 0.4,
+    };
+    println!("{}", monarch.relative_age()); // 31
+}
+```

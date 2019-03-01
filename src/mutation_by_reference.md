@@ -94,7 +94,32 @@ fn main() {
 }
 ```
 
-Rust makes this difficult as copying a vector is an expensive operation - `Vec` is `Clone`, and not `Copy`.
+### `Clone` vs `Copy`
+
+Cloning a vector is an expensive operation, so we need to be explicit. However, some values are cheap to copy. Rewriting our first example slightly:
+
+```rust
+fn main() {
+    let number = 3;
+    let mut numbers = vec![number, number];
+    numbers[0] += 100;
+    println!("{:?}", numbers); // [103, 3]
+}
+```
+
+Rust compiles this example fine, and changing one `number` does not alter the other. The difference is that:
+
+- `Vec` implements the `Clone` trait - expensive to copy
+- `int64` implements the `Copy` trait - cheap to copy
+
+Instead of **moving** `number` into `vec!` twice and causing a compile error, rust assumes `Copy` data types are cheap enough to just copy into a function. Altering one copy does not affect the other.
+
+You can find the full list of types that implement the `Copy` trait [in the docs](https://doc.rust-lang.org/std/marker/trait.Copy.html). These include:
+
+- `bool`
+- `char`
+- `i64`, `f64`, etc.
+- `Option<T> where T: copy`, etc.
 
 ## Summary
 
