@@ -1,0 +1,322 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Missing Magic Methods - Python bugs (explained) in Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="mutation_by_reference.html"><strong aria-hidden="true">1.</strong> Mutation by Reference</a></li><li><a href="missing_magic_methods.html" class="active"><strong aria-hidden="true">2.</strong> Missing Magic Methods</a></li><li><a href="display_formatting.html"><strong aria-hidden="true">3.</strong> Display Formatting</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Python bugs (explained) in Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#missing-magic-methods" id="missing-magic-methods"><h1>Missing Magic Methods</h1></a>
+<a class="header" href="#python--like-objects" id="python--like-objects"><h2>python: *-like objects</h2></a>
+<p>You may have heard the term <em>file-like object</em> when working in Python. This normally means an object that has <code>read</code> and <code>write</code> methods.</p>
+<p>This means that when we write:</p>
+<pre><code class="language-python">import json
+
+file_handle = open(&quot;data.json&quot;, &quot;r&quot;)
+data = json.load(file_handle)
+</code></pre>
+<p>We are expected to understand that <strong>implicitly</strong>:</p>
+<ul>
+<li>the builtin <code>open</code> function returns an object with a <code>read</code> method</li>
+<li>the function <code>json.load</code> will call the <code>read</code> method on the object it is given</li>
+<li>if either of these constraints is violated, we will get an <code>AttributeError</code> at runtime</li>
+</ul>
+<pre><code class="language-python">import json
+
+not_a_file_handle = &quot;spam&quot;
+data = json.load(not_a_file_handle) # AttributeError: 'str' object has no attribute 'read'
+</code></pre>
+<p>This makes it hard to link external libraries together, all of which may have sligtly different interfaces. Rust has a better solution to explitly enforcing these constraints at compile time: <strong>Traits</strong>.</p>
+<a class="header" href="#rust-traits" id="rust-traits"><h2>rust: Traits</h2></a>
+<p>Traits are rust's way of pulling together several concepts found in python:</p>
+<ul>
+<li>magic methods</li>
+<li>abstract base classes</li>
+<li>*-like objects</li>
+</ul>
+<p>In rust we can enforce that a struct has associated methods by defining a trait:</p>
+<pre><pre class="playpen"><code class="language-rust">struct Dog {
+    age: i64,
+}
+
+trait AnimalAge {
+    fn relative_age(&amp;self) -&gt; i64;
+}
+
+impl AnimalAge for Dog {
+    fn relative_age(&amp;self) -&gt; i64 {
+        self.age * 7
+    }
+}
+
+fn main() {
+    let gaspode = Dog {
+        age: 9,
+    };
+    println!(&quot;{}&quot;, gaspode.relative_age()); // 63
+}
+</code></pre></pre>
+<p>The above example explains that:</p>
+<ul>
+<li>the trait <code>AnimalAge</code> contains the method <code>relative_age</code></li>
+<li><code>Dog</code> has an implementation for <code>AnimalAge</code></li>
+<li><code>gaspode</code> is an instance of <code>Dog</code></li>
+<li>therefore, we can call <code>gaspode.relative_age()</code> and know the method exists</li>
+</ul>
+<p>If we forgot to add our implementation using <code>impl AnimalAge for Dog</code>, we would see</p>
+<pre><pre class="playpen"><code class="language-rust compile_fail">struct Dog {
+    age: i64,
+}
+
+trait AnimalAge {
+    fn relative_age(&amp;self) -&gt; i64;
+}
+
+fn main() {
+    let gaspode = Dog {
+        age: 9,
+    };
+    println!(&quot;{}&quot;, gaspode.relative_age());
+}
+</code></pre></pre>
+<pre><code class="language-log">error[E0599]: no method named `relative_age` found for type `Dog` in the current scope
+  --&gt; /tmp/mdbook-07XN09/display_formatting.md:126:28
+   |
+2  | struct Dog {
+   | ---------- method `relative_age` not found for this
+...
+14 |     println!(&quot;{}&quot;, gaspode.relative_age());
+   |                            ^^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following trait defines an item `relative_age`, perhaps you need to implement it:
+           candidate #1: `AnimalAge`
+</code></pre>
+<p>rustc has helpfully worked out:</p>
+<ul>
+<li><code>Dog</code> does not have a method called <code>relative_age</code> directly on it</li>
+<li>there is a trait in scope called <code>AnimalAge</code> that we could implement to solve this error</li>
+</ul>
+<p>Traits also help encapsulate features that can be shared between unrelated structs. Below we see an implementation of the same <code>AnimalAge</code> trait for a struct with different data type. Note how traits only define an interface, not the underlying details.</p>
+<pre><pre class="playpen"><code class="language-rust">struct Butterfly {
+    age: f64,
+}
+
+trait AnimalAge {
+    fn relative_age(&amp;self) -&gt; i64;
+}
+
+impl AnimalAge for Butterfly {
+    fn relative_age(&amp;self) -&gt; i64 {
+        (self.age * 79.0).floor() as i64
+    }
+}
+
+fn main() {
+    let monarch = Butterfly {
+        age: 0.4,
+    };
+    println!(&quot;{}&quot;, monarch.relative_age()); // 31
+}
+</code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="mutation_by_reference.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="display_formatting.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="mutation_by_reference.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="display_formatting.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
+        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
+        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

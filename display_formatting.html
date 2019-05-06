@@ -1,0 +1,300 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Display Formatting - Python bugs (explained) in Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="mutation_by_reference.html"><strong aria-hidden="true">1.</strong> Mutation by Reference</a></li><li><a href="missing_magic_methods.html"><strong aria-hidden="true">2.</strong> Missing Magic Methods</a></li><li><a href="display_formatting.html" class="active"><strong aria-hidden="true">3.</strong> Display Formatting</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Python bugs (explained) in Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#display-formatting" id="display-formatting"><h1>Display Formatting</h1></a>
+<a class="header" href="#python-print" id="python-print"><h2>python: print</h2></a>
+<p>It's common to use <code>print</code> statements in python for debugging. For primitive data types, this works well out of the box:</p>
+<pre><code class="language-python">def main():
+    wrap = {
+        &quot;filling&quot;: &quot;falafel&quot;
+    }
+    print(d)  # {'filling': 'falafel'}
+</code></pre>
+<p>However, for more complex types, it can be annoying to run a long task and then get an opaque output:</p>
+<pre><code class="language-python">class Wrap(object):
+    def __init__(self, filling):
+        self.filling = filling
+
+def main():
+    wrap = Wrap(&quot;falafel&quot;)
+    print(wrap)  # &lt;__main__.Wrap object at 0x7f7c24dcd4d0&gt;
+</code></pre>
+<p>If what we wanted each time was to see details of our <code>Wrap</code>, we could implement the <code>__repr__</code> <a href="https://rszalski.github.io/magicmethods/">magic method</a> which is called by <code>print</code>.</p>
+<pre><code class="language-python">class Wrap(object):
+    def __init__(self, filling):
+        self.filling = filling
+
+    def __repr__(self):
+        return f&quot;&lt;Wrap with {self.filling} filling&gt;&quot;
+
+def main():
+    wrap = Wrap(&quot;falafel&quot;)
+    print(wrap)  # &lt;Wrap with falafel filling&gt;
+</code></pre>
+<p>This has a couple of downsides. Firstly, it can be tedious to reimplement many times. There are a couple of boilerplate libraries out there:</p>
+<ul>
+<li><a href="https://pypi.org/project/attrs/"><code>attrs</code></a></li>
+<li><a href="https://docs.python.org/3/library/dataclasses.html"><code>dataclasses</code> module</a></li>
+</ul>
+<p>But more importantly, how did we even know to implement <code>__repr__</code>? It's not mentioned by <code>help(print)</code>, or <a href="https://docs.python.org/3/library/functions.html#print">the online documentation</a>. A quick google for &quot;python print class&quot; does turn up <a href="https://stackoverflow.com/questions/1535327/how-to-print-objects-of-class-using-print">the right answer</a>.</p>
+<a class="header" href="#rust-derived-traits" id="rust-derived-traits"><h2>rust: Derived Traits</h2></a>
+<p>In rust, struct method calls are grouped into <code>Traits</code>. We can see which trait is needed to display our custom struct from the compiler:</p>
+<pre><pre class="playpen"><code class="language-rust compile_fail">struct Wrap {
+    filling: String
+}
+
+fn main() {
+    let wrap = Wrap {
+        filling: String::from(&quot;falafel&quot;),
+    };
+    println!(&quot;{}&quot;, wrap)
+}
+</code></pre></pre>
+<pre><code class="language-log">error[E0277]: `Wrap` doesn't implement `std::fmt::Display`
+  --&gt; /tmp/mdbook-b59VOb/display_formatting.md:61:20
+   |
+10 |     println!(&quot;{}&quot;, wrap)
+   |                    ^^^^ `Wrap` cannot be formatted with the default formatter
+   |
+   = help: the trait `std::fmt::Display` is not implemented for `Wrap`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+   = note: required by `std::fmt::Display::fmt`
+</code></pre>
+<p>This tells us we have a couple of things:</p>
+<ul>
+<li>we cannot format <code>wrap</code> in this way with <code>println!</code> because it's missing the <code>fmt::Display</code> trait</li>
+<li>the function that requires this trait is <code>fmt::Display::fmt</code></li>
+</ul>
+<p>We can implement the <code>Display</code> trait ourselves:</p>
+<pre><pre class="playpen"><code class="language-rust">use std::fmt;
+
+struct Wrap {
+    filling: String
+}
+
+impl fmt::Display for Wrap {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f, &quot;&lt;Wrap with {} filling&gt;&quot;, self.filling)
+    }
+}
+
+fn main() {
+    let wrap = Wrap {
+        filling: String::from(&quot;falafel&quot;),
+    };
+    println!(&quot;{}&quot;, wrap) // &lt;Wrap with falafel filling&gt;
+}
+</code></pre></pre>
+<p>Or we can derive the <code>Debug</code> trait that rust provides.</p>
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
+struct Wrap {
+    filling: String
+}
+
+fn main() {
+    let wrap = Wrap {
+        filling: String::from(&quot;falafel&quot;),
+    };
+    println!(&quot;{:?}&quot;, wrap) // Wrap { filling: &quot;falafel&quot; }
+}
+</code></pre></pre>
+<p>What's going on here? Rust implements the <code>Debug</code> trait on all primitive types. We can <code>derive</code> this trait for our new struct, if all the fields implement <code>Debug</code> themselves.</p>
+<p>The <code>derive</code> macro will take care of writing the <code>impl Debug for Wrap</code> block for use, and asking it to call the corresponding methods on child values (such as <code>println!(&quot;{:?}&quot;, self.filling)</code>).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="missing_magic_methods.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="missing_magic_methods.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
+        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
+        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

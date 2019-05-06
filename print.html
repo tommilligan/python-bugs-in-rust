@@ -1,0 +1,506 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Python bugs (explained) in Rust</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme + ' js';
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li class="affix"><a href="intro.html">Introduction</a></li><li><a href="mutation_by_reference.html"><strong aria-hidden="true">1.</strong> Mutation by Reference</a></li><li><a href="missing_magic_methods.html"><strong aria-hidden="true">2.</strong> Missing Magic Methods</a></li><li><a href="display_formatting.html"><strong aria-hidden="true">3.</strong> Display Formatting</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Python bugs (explained) in Rust</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="#intro" id="intro"><h1>Intro</h1></a>
+<p>A series on how explicit code in Rust is better at catching bugs than runtime errors in Python.</p>
+<a class="header" href="#mutation-by-reference" id="mutation-by-reference"><h1>Mutation by reference</h1></a>
+<a class="header" href="#simple-vs-complex-data-structures" id="simple-vs-complex-data-structures"><h2>Simple vs complex data structures</h2></a>
+<p>Consider this python function:</p>
+<pre><code class="language-python">def main():
+    numbers = [0, 1]
+    numbers[0] += 100
+    print(numbers) # [100, 1]
+</code></pre>
+<p>We assign two pieces of data in an array, and modify one of them.
+How about this slightly more complex example?</p>
+<pre><code class="language-python">def main():
+    numbers = [0, 1]
+    matrix = [numbers, numbers]
+    matrix[0].append(2)
+    print(matrix)
+</code></pre>
+<p>You might expect the output to be:</p>
+<pre><code class="language-log">([0, 1, 2], [0, 1])
+</code></pre>
+<p>But what we actually get is:</p>
+<pre><code class="language-log">([0, 1, 2], [0, 1, 2])
+</code></pre>
+<p>On line 3, when we assigned an array with <code>[numbers, numbers]</code>,
+we didn't actually copy the data. We only stored two <em>references</em>
+to the same piece of data.</p>
+<p>So when we update the underlying data, all references are updated.</p>
+<a class="header" href="#references-are-pointers-to-data" id="references-are-pointers-to-data"><h2>References are pointers to data</h2></a>
+<p>In rust:</p>
+<ul>
+<li>references are noted explicitly using the <code>&amp;</code> operator.</li>
+<li>mutable data structures are noted explicitly using the <code>mut</code> keyword.</li>
+</ul>
+<p>Here we can see that the <code>Vec</code> is mutable, so we should expect the values to change.</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    let mut numbers = vec![0, 1];
+    numbers[0] += 100;
+    println!(&quot;{:?}&quot;, numbers); // [100, 1]
+}
+</code></pre></pre>
+<p>If we write this like our python example, Rust throws us a nice compiler error:</p>
+<pre><pre class="playpen"><code class="language-rust compile_fail">fn main() {
+    let numbers = vec![0, 1];
+
+    // error[E0382]: use of moved value: `numbers`
+    let mut matrix = vec![numbers, numbers];
+
+    matrix[0].push(2);
+    println!(&quot;{:?}&quot;, matrix);
+}
+</code></pre></pre>
+<p>Rust is telling us that we are being ambiguous about how we want to duplicate data here. We can either explicitly use the same <code>Vec</code> twice, and store two references to it:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    let mut numbers = vec![0, 1];
+
+    let mut matrix = [&amp;numbers, &amp;numbers];
+    println!(&quot;{:?}&quot;, matrix); // [[0, 1], [0, 1]]
+}
+</code></pre></pre>
+<p>Or, we can clone <code>numbers</code> to form a second vector, which will allow us to mutate one at a time:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    let numbers_0 = vec![0, 1];
+    let numbers_1 = numbers_0.clone();
+    let mut matrix = vec![numbers_0, numbers_1];
+    matrix[0].push(2);
+    println!(&quot;{:?}&quot;, matrix); // [[0, 1, 2], [0, 1]]
+}
+</code></pre></pre>
+<a class="header" href="#clone-vs-copy" id="clone-vs-copy"><h3><code>Clone</code> vs <code>Copy</code></h3></a>
+<p>Cloning a vector is an expensive operation, so we need to be explicit. However, some values are cheap to copy. Rewriting our first example slightly:</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    let number = 3;
+    let mut numbers = vec![number, number];
+    numbers[0] += 100;
+    println!(&quot;{:?}&quot;, numbers); // [103, 3]
+}
+</code></pre></pre>
+<p>Rust compiles this example fine, and changing one <code>number</code> does not alter the other. The difference is that:</p>
+<ul>
+<li><code>Vec</code> implements the <code>Clone</code> trait - expensive to copy</li>
+<li><code>int64</code> implements the <code>Copy</code> trait - cheap to copy</li>
+</ul>
+<p>Instead of <strong>moving</strong> <code>number</code> into <code>vec!</code> twice and causing a compile error, rust assumes <code>Copy</code> data types are cheap enough to just copy into a function. Altering one copy does not affect the other.</p>
+<p>You can find the full list of types that implement the <code>Copy</code> trait <a href="https://doc.rust-lang.org/std/marker/trait.Copy.html">in the docs</a>. These include:</p>
+<ul>
+<li><code>bool</code></li>
+<li><code>char</code></li>
+<li><code>i64</code>, <code>f64</code>, etc.</li>
+<li><code>Option&lt;T&gt; where T: copy</code>, etc.</li>
+</ul>
+<a class="header" href="#summary" id="summary"><h2>Summary</h2></a>
+<p>One of rust's core features is <em>ownership</em>. This helps avoid accidental mutation of data, by enforcing who can use and update data at compile time.</p>
+<a class="header" href="#missing-magic-methods" id="missing-magic-methods"><h1>Missing Magic Methods</h1></a>
+<a class="header" href="#python--like-objects" id="python--like-objects"><h2>python: *-like objects</h2></a>
+<p>You may have heard the term <em>file-like object</em> when working in Python. This normally means an object that has <code>read</code> and <code>write</code> methods.</p>
+<p>This means that when we write:</p>
+<pre><code class="language-python">import json
+
+file_handle = open(&quot;data.json&quot;, &quot;r&quot;)
+data = json.load(file_handle)
+</code></pre>
+<p>We are expected to understand that <strong>implicitly</strong>:</p>
+<ul>
+<li>the builtin <code>open</code> function returns an object with a <code>read</code> method</li>
+<li>the function <code>json.load</code> will call the <code>read</code> method on the object it is given</li>
+<li>if either of these constraints is violated, we will get an <code>AttributeError</code> at runtime</li>
+</ul>
+<pre><code class="language-python">import json
+
+not_a_file_handle = &quot;spam&quot;
+data = json.load(not_a_file_handle) # AttributeError: 'str' object has no attribute 'read'
+</code></pre>
+<p>This makes it hard to link external libraries together, all of which may have sligtly different interfaces. Rust has a better solution to explitly enforcing these constraints at compile time: <strong>Traits</strong>.</p>
+<a class="header" href="#rust-traits" id="rust-traits"><h2>rust: Traits</h2></a>
+<p>Traits are rust's way of pulling together several concepts found in python:</p>
+<ul>
+<li>magic methods</li>
+<li>abstract base classes</li>
+<li>*-like objects</li>
+</ul>
+<p>In rust we can enforce that a struct has associated methods by defining a trait:</p>
+<pre><pre class="playpen"><code class="language-rust">struct Dog {
+    age: i64,
+}
+
+trait AnimalAge {
+    fn relative_age(&amp;self) -&gt; i64;
+}
+
+impl AnimalAge for Dog {
+    fn relative_age(&amp;self) -&gt; i64 {
+        self.age * 7
+    }
+}
+
+fn main() {
+    let gaspode = Dog {
+        age: 9,
+    };
+    println!(&quot;{}&quot;, gaspode.relative_age()); // 63
+}
+</code></pre></pre>
+<p>The above example explains that:</p>
+<ul>
+<li>the trait <code>AnimalAge</code> contains the method <code>relative_age</code></li>
+<li><code>Dog</code> has an implementation for <code>AnimalAge</code></li>
+<li><code>gaspode</code> is an instance of <code>Dog</code></li>
+<li>therefore, we can call <code>gaspode.relative_age()</code> and know the method exists</li>
+</ul>
+<p>If we forgot to add our implementation using <code>impl AnimalAge for Dog</code>, we would see</p>
+<pre><pre class="playpen"><code class="language-rust compile_fail">struct Dog {
+    age: i64,
+}
+
+trait AnimalAge {
+    fn relative_age(&amp;self) -&gt; i64;
+}
+
+fn main() {
+    let gaspode = Dog {
+        age: 9,
+    };
+    println!(&quot;{}&quot;, gaspode.relative_age());
+}
+</code></pre></pre>
+<pre><code class="language-log">error[E0599]: no method named `relative_age` found for type `Dog` in the current scope
+  --&gt; /tmp/mdbook-07XN09/display_formatting.md:126:28
+   |
+2  | struct Dog {
+   | ---------- method `relative_age` not found for this
+...
+14 |     println!(&quot;{}&quot;, gaspode.relative_age());
+   |                            ^^^^^^^^^^^^
+   |
+   = help: items from traits can only be used if the trait is implemented and in scope
+   = note: the following trait defines an item `relative_age`, perhaps you need to implement it:
+           candidate #1: `AnimalAge`
+</code></pre>
+<p>rustc has helpfully worked out:</p>
+<ul>
+<li><code>Dog</code> does not have a method called <code>relative_age</code> directly on it</li>
+<li>there is a trait in scope called <code>AnimalAge</code> that we could implement to solve this error</li>
+</ul>
+<p>Traits also help encapsulate features that can be shared between unrelated structs. Below we see an implementation of the same <code>AnimalAge</code> trait for a struct with different data type. Note how traits only define an interface, not the underlying details.</p>
+<pre><pre class="playpen"><code class="language-rust">struct Butterfly {
+    age: f64,
+}
+
+trait AnimalAge {
+    fn relative_age(&amp;self) -&gt; i64;
+}
+
+impl AnimalAge for Butterfly {
+    fn relative_age(&amp;self) -&gt; i64 {
+        (self.age * 79.0).floor() as i64
+    }
+}
+
+fn main() {
+    let monarch = Butterfly {
+        age: 0.4,
+    };
+    println!(&quot;{}&quot;, monarch.relative_age()); // 31
+}
+</code></pre></pre>
+<a class="header" href="#display-formatting" id="display-formatting"><h1>Display Formatting</h1></a>
+<a class="header" href="#python-print" id="python-print"><h2>python: print</h2></a>
+<p>It's common to use <code>print</code> statements in python for debugging. For primitive data types, this works well out of the box:</p>
+<pre><code class="language-python">def main():
+    wrap = {
+        &quot;filling&quot;: &quot;falafel&quot;
+    }
+    print(d)  # {'filling': 'falafel'}
+</code></pre>
+<p>However, for more complex types, it can be annoying to run a long task and then get an opaque output:</p>
+<pre><code class="language-python">class Wrap(object):
+    def __init__(self, filling):
+        self.filling = filling
+
+def main():
+    wrap = Wrap(&quot;falafel&quot;)
+    print(wrap)  # &lt;__main__.Wrap object at 0x7f7c24dcd4d0&gt;
+</code></pre>
+<p>If what we wanted each time was to see details of our <code>Wrap</code>, we could implement the <code>__repr__</code> <a href="https://rszalski.github.io/magicmethods/">magic method</a> which is called by <code>print</code>.</p>
+<pre><code class="language-python">class Wrap(object):
+    def __init__(self, filling):
+        self.filling = filling
+
+    def __repr__(self):
+        return f&quot;&lt;Wrap with {self.filling} filling&gt;&quot;
+
+def main():
+    wrap = Wrap(&quot;falafel&quot;)
+    print(wrap)  # &lt;Wrap with falafel filling&gt;
+</code></pre>
+<p>This has a couple of downsides. Firstly, it can be tedious to reimplement many times. There are a couple of boilerplate libraries out there:</p>
+<ul>
+<li><a href="https://pypi.org/project/attrs/"><code>attrs</code></a></li>
+<li><a href="https://docs.python.org/3/library/dataclasses.html"><code>dataclasses</code> module</a></li>
+</ul>
+<p>But more importantly, how did we even know to implement <code>__repr__</code>? It's not mentioned by <code>help(print)</code>, or <a href="https://docs.python.org/3/library/functions.html#print">the online documentation</a>. A quick google for &quot;python print class&quot; does turn up <a href="https://stackoverflow.com/questions/1535327/how-to-print-objects-of-class-using-print">the right answer</a>.</p>
+<a class="header" href="#rust-derived-traits" id="rust-derived-traits"><h2>rust: Derived Traits</h2></a>
+<p>In rust, struct method calls are grouped into <code>Traits</code>. We can see which trait is needed to display our custom struct from the compiler:</p>
+<pre><pre class="playpen"><code class="language-rust compile_fail">struct Wrap {
+    filling: String
+}
+
+fn main() {
+    let wrap = Wrap {
+        filling: String::from(&quot;falafel&quot;),
+    };
+    println!(&quot;{}&quot;, wrap)
+}
+</code></pre></pre>
+<pre><code class="language-log">error[E0277]: `Wrap` doesn't implement `std::fmt::Display`
+  --&gt; /tmp/mdbook-b59VOb/display_formatting.md:61:20
+   |
+10 |     println!(&quot;{}&quot;, wrap)
+   |                    ^^^^ `Wrap` cannot be formatted with the default formatter
+   |
+   = help: the trait `std::fmt::Display` is not implemented for `Wrap`
+   = note: in format strings you may be able to use `{:?}` (or {:#?} for pretty-print) instead
+   = note: required by `std::fmt::Display::fmt`
+</code></pre>
+<p>This tells us we have a couple of things:</p>
+<ul>
+<li>we cannot format <code>wrap</code> in this way with <code>println!</code> because it's missing the <code>fmt::Display</code> trait</li>
+<li>the function that requires this trait is <code>fmt::Display::fmt</code></li>
+</ul>
+<p>We can implement the <code>Display</code> trait ourselves:</p>
+<pre><pre class="playpen"><code class="language-rust">use std::fmt;
+
+struct Wrap {
+    filling: String
+}
+
+impl fmt::Display for Wrap {
+    fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+        write!(f, &quot;&lt;Wrap with {} filling&gt;&quot;, self.filling)
+    }
+}
+
+fn main() {
+    let wrap = Wrap {
+        filling: String::from(&quot;falafel&quot;),
+    };
+    println!(&quot;{}&quot;, wrap) // &lt;Wrap with falafel filling&gt;
+}
+</code></pre></pre>
+<p>Or we can derive the <code>Debug</code> trait that rust provides.</p>
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
+struct Wrap {
+    filling: String
+}
+
+fn main() {
+    let wrap = Wrap {
+        filling: String::from(&quot;falafel&quot;),
+    };
+    println!(&quot;{:?}&quot;, wrap) // Wrap { filling: &quot;falafel&quot; }
+}
+</code></pre></pre>
+<p>What's going on here? Rust implements the <code>Debug</code> trait on all primitive types. We can <code>derive</code> this trait for our new struct, if all the fields implement <code>Debug</code> themselves.</p>
+<p>The <code>derive</code> macro will take care of writing the <code>impl Debug for Wrap</code> block for use, and asking it to call the corresponding methods on child values (such as <code>println!(&quot;{:?}&quot;, self.filling)</code>).</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+        <script src="ace.js" type="text/javascript" charset="utf-8"></script>
+        <script src="editor.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mode-rust.js" type="text/javascript" charset="utf-8"></script>
+        <script src="theme-dawn.js" type="text/javascript" charset="utf-8"></script>
+        <script src="theme-tomorrow_night.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>
